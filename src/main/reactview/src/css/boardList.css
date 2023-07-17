@@ -1,0 +1,260 @@
+.category-link,
+.sub-category-link {
+  padding: 5px 0;
+  background-color: transparent;
+  border: none;
+  color: gray;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘침 처리 */
+  text-overflow: ellipsis; /* 넘친 부분에 대한 생략 (...) 표시 */
+}
+
+.pStyle{
+    display:flex;
+    font-size:2.5rem;
+    justify-content:center;
+}
+
+.titleBorder{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    margin: 15px;
+    padding: 20px;
+    padding-bottom: 500px;
+    height: auto;
+}
+
+.flexFilter{
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-link:hover{
+    color:black;
+    font-weight:bold;
+}
+
+.category-link.active{
+    color:black;
+    font-weight:bold;
+}
+.sub-category-link:hover{
+  color:black;
+    font-weight:bold;
+    background : transparent;
+}
+.sub-category-link.active {
+  color: black;
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.sell-boards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sell-board {
+  width: 19%;
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+.sell-board-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.flex-column {
+  padding: 0 10px;
+  height: 100%;
+  font-size: 14px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.flex-item {
+  flex-grow: 1;
+}
+
+.hide-subcategory {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+}
+
+.show-subcategory {
+  width: 100px;
+  font-family: "font", sans-serif;
+  transition: width 0.3s ease-in-out;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageBtn {
+  border: none;
+  background-color: white;
+  color: gray;
+  margin-right: 5px;
+}
+
+.pageBtn:hover {
+  background-color: #3eb489;
+}
+
+.pageBtn.current {
+  color: black;
+  font-weight: bold;
+}
+
+.pageArrowBtn {
+  background-color: white;
+  color: gray;
+  border: none;
+  margin-right: 5px;
+  border-radius: 15px;
+}
+
+.pageArrowBtn:hover {
+  background-color: #3eb489;
+}
+
+.pushed-content {
+  margin-left: 100px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.sell-board-p {
+  border-bottom: 1px solid grey;
+}
+
+.sortBy {
+  width: 180px;
+}
+
+.filter {
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 5px;
+  display: inline-block;
+  margin-right: 5px;
+
+}
+
+.filter span {
+  margin-right: 5px;
+}
+
+.filter button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  color: gray;
+  cursor: pointer;
+}
+
+.long-text {
+  border: 1px solid black;
+}
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.search{
+    width:20%!important;
+}
+.m-filter{
+    margin-top:3px;
+}
+.filtertext{
+    text-align: right; margin-right: 50px; font-size: 22px;
+}
+
+.writebutton{
+     padding: 15px 5em 0;
+     background-color:#6bc27e!important;
+     margin-top: 30%;
+     position: fixed;
+     margin-left: 3%;
+}
+.writebuttontext{
+    text-align:center;
+    font-size:20px;
+    font-weight: 600;
+}
+
+.col-sm-2{
+    display:flex;
+    width:20%;
+}
+
+.search-input{
+    width:12vw;
+    height:4vh;
+}
+.col-md-3{
+    display:flex !important;
+    width: 100%;
+    margin-left: 10px;
+}
+
+.dark-dropdown .dropdown-menu {
+  background-color: #343a40;
+}
+
+.dropdown-item {
+    color : white;
+}
+
+
+.range-slider__wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.range-slider {
+    width : 80%;
+}
+
+
+.modal-content {
+    height: 100%;
+    width: 100%;
+}
