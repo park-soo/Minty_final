@@ -1,6 +1,7 @@
 package com.Reboot.Minty.tradeBoard.repository;
 
 import com.Reboot.Minty.categories.entity.SubCategory;
+import com.Reboot.Minty.member.entity.User;
 import com.Reboot.Minty.tradeBoard.entity.TradeBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,6 @@ import java.util.Optional;
 @Repository
 public interface TradeBoardRepository extends JpaRepository<TradeBoard,Long> {
     List<TradeBoard> findByUserId(Long userId);
+
+    int countByUser(User user);
 }

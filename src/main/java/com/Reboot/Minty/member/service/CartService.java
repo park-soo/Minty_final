@@ -6,7 +6,6 @@ import com.Reboot.Minty.member.entity.WishlistItem;
 import com.Reboot.Minty.member.repository.BoardRepository;
 import com.Reboot.Minty.member.repository.WishlistItemRepository;
 import com.Reboot.Minty.tradeBoard.entity.TradeBoard;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

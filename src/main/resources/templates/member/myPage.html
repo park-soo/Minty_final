@@ -455,6 +455,16 @@
       margin-top: 25px;
       margin-left: 10px;
     }
+    .deco {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .deco .emoji-item {
+        flex: 0 0 0%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">
@@ -576,10 +586,18 @@
                     </div>
                 </div>
             </div>
-
             <div class="deco">
-
+                <!-- 구매한 이모티콘 이미지 표시 -->
+                <th:block th:each="emojiShop : ${purchasedEmojis}">
+                    <div class="emoji-item">
+                        <a th:href="@{/emojiDetail/{id}(id=${emojiShop.id})}">
+                            <img th:src="@{'https://storage.cloud.google.com/reboot-minty-storage/' + ${emojiShop.images[0]}}" alt="Emoji Image" class="emoji-image" style="width: 80px; height: 80px;">
+                        </a>
+                        <p><span th:text="${emojiShop.name}" class="emoji-text" style="margin-left: 20px;"></span></p>
+                    </div>
+                </th:block>
             </div>
+
         </div>
 
         <div class="Categories">

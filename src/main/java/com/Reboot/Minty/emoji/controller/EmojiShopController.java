@@ -2,14 +2,14 @@ package com.Reboot.Minty.emoji.controller;
 
 import com.Reboot.Minty.emoji.entity.EmojiShop;
 import com.Reboot.Minty.emoji.service.EmojiShopService;
-import com.Reboot.Minty.support.entity.Ad;
-import com.google.api.gax.rpc.NotFoundException;
+import com.Reboot.Minty.member.entity.User;
+import com.Reboot.Minty.member.repository.UserRepository;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,26 +17,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
 public class EmojiShopController {
 
     private final EmojiShopService emojiShopService;
+    private final UserRepository userRepository;
     @Autowired
     private Storage storage;
     @Autowired
-    public EmojiShopController(EmojiShopService emojiShopService) {
+    public EmojiShopController(EmojiShopService emojiShopService, UserRepository userRepository) {
 
         this.emojiShopService = emojiShopService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/emojiRegister")
@@ -46,7 +43,11 @@ public class EmojiShopController {
     }
 
     @GetMapping("/emojiDetail/{id}")
-    public String showEmojiDetail(@PathVariable("id") Long id, Model model) {
+    public String showEmojiDetail(@PathVariable("id") Long id, HttpSession session, Model model) {
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+
+        // EmojiShop 정보 가져오기
         EmojiShop emojiShop = emojiShopService.getEmojiShopById(id);
         model.addAttribute("emojiShop", emojiShop);
 
@@ -59,10 +60,13 @@ public class EmojiShopController {
         }
         model.addAttribute("imageGroups", imageGroups);
 
+        // 사용자 정보 모델에 저장
+        model.addAttribute("user", user);
+
         return "event/emojiDetail";
     }
 
-//    @GetMapping("/emojiDetail/{id}")
+    //    @GetMapping("/emojiDetail/{id}")
 //    public String showEmojiDetail(@PathVariable("id") Long id, Model model) {
 //        EmojiShop emojiShop = emojiShopService.getEmojiShopById(id);
 //        model.addAttribute("emojiShop", emojiShop);
@@ -101,4 +105,5 @@ public class EmojiShopController {
         emojiShopService.saveEmoji(emojiShop);
         return "redirect:/emojiList";
     }
+
 }

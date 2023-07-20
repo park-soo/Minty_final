@@ -8,69 +8,55 @@
   <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
-  @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap');
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
       text-align: center;
-       font-family: 'Dongle', sans-serif;
+      font-family: 'Dongle', sans-serif;
       font-size: 23px;
       font-weight: bold;
       margin-bottom: 20px;
     }
-
     header {
 
     }
-
     .emoji-details {
-
       display: flex;
       align-items: center;
-
     }
-
     .emoji-info {
       flex: 1;
       text-align: center;
     }
-
-
-.emoji-text {
- display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin: 0 auto;
-  font-size: 32px;
-  font-weight: bold;
-  color: #4c4c4c;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-
-    .emoji-info p {
-    font-size: 39px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    padding-right: 17px;
-    text-overflow: ellipsis;
-
-    text-align: center; /* 가격을 오른쪽으로 정렬합니다. */
+    .emoji-text {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 0 auto;
+      font-size: 32px;
+      font-weight: bold;
+      color: #4c4c4c;
+      text-align: center;
+      margin-bottom: 10px;
     }
-
-
+    .emoji-info p {
+      font-size: 39px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      padding-right: 17px;
+      text-overflow: ellipsis;
+      text-align: center; /* 가격을 오른쪽으로 정렬합니다. */
+    }
     tr {
       font-size: 26px;
     }
-
     th {
       background-color: #ffffff;
       font-weight: bold;
     }
-
     /* 버튼 스타일 변경 */
     .buy-button {
       font-size: 26px;
@@ -81,20 +67,15 @@
       cursor: pointer;
       margin-right: 10px;
       font-weight: bold;
-
-
     }
-
-
     .emoji-image {
       display: flex;
       margin-top: 50px;
       transition: transform 0.3s;
     }
-     .emoji-image:hover {
-    transform: scale(1.1);
-  }
-
+    .emoji-image:hover {
+      transform: scale(1.1);
+    }
     .image-container {
       display: grid;
       grid-template-columns: 150px 150px 150px 150px;
@@ -103,11 +84,33 @@
       justify-content: center;
       align-items: center;
     }
-
-
+    /* 팝업 스타일 변경 */
+     .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      z-index: 9999;
+    }
+    .popup-content {
+      margin-bottom: 20px;
+    }
+    .popup-button {
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background-color: #ffcccc;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
-
 <body>
 <div layout:fragment="content">
   <div class="container">
@@ -121,20 +124,18 @@
       <div class="emoji-info">
         <p><span th:text="${emojiShop.name}"  class="emoji-text" ></span></p>
         <br>
-
         <p><span th:text="${emojiShop.price} + ' P'"></span></p>
-        <button class="buy-button">구매하기</button>
+        <button class="buy-button" onclick="showPurchaseConfirmation()">구매하기</button>
         <button class="buy-button">찜하기</button>
+        <p id="user-point" style="display:flex" ><span th:text="${user.point}"></span></p>
+        <p id="user-id" style="display:flex" ><span th:text="${user.id}"></span></p>
       </div>
     </div>
     <br>
     <hr>
     <br>
     <div class="emoji-description">
-
-
       <img class="banner" src="/image/manager/첫거래시-이모티콘.png" alt="배너 이미지" style=" margin: 0px -61px 31px ;">
-
     </div>
   </div>
 
@@ -144,8 +145,100 @@
         <img th:src="@{'https://storage.cloud.google.com/reboot-minty-storage/' + ${imageUrl}}" alt="more image" class="emoji-image" style="margin-left: 35px;">
       </div>
     </div>
-  </div><br><br><br><br>
+  </div>
 
+  <!-- 데이터 속성을 사용하여 값 저장 -->
+  <input type="hidden" id="emojiId" th:value="${emojiShop.id}">
+  <input type="hidden" id="buyerId" th:value="${user.id}">
+  <input type="hidden" id="price" th:value="${emojiShop.price}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+function showPurchaseConfirmation() {
+  // 팝업 창 생성
+  var popup = document.createElement('div');
+  popup.classList.add('popup');
+
+  // 팝업 내용 추가
+  var content = document.createElement('div');
+  content.classList.add('popup-content');
+  content.textContent = '구매하시겠습니까?';
+  popup.appendChild(content);
+
+  // 확인 버튼 추가
+  var confirmButton = document.createElement('button');
+  confirmButton.classList.add('popup-button');
+  confirmButton.textContent = '확인';
+  confirmButton.onclick = function() {
+    // 확인 버튼을 눌렀을 때 구매 진행
+    purchaseEmoji();
+    // 팝업 창 제거
+    document.body.removeChild(popup);
+  };
+  popup.appendChild(confirmButton);
+
+  // 취소 버튼 추가
+  var cancelButton = document.createElement('button');
+  cancelButton.classList.add('popup-button');
+  cancelButton.textContent = '취소';
+  cancelButton.onclick = function() {
+    // 취소 버튼을 눌렀을 때 처리
+    // 팝업 창 제거
+    document.body.removeChild(popup);
+  };
+  popup.appendChild(cancelButton);
+
+  // 팝업 창을 body 요소에 추가
+  document.body.appendChild(popup);
+}
+
+function purchaseEmoji() {
+  var token = $("meta[name='_csrf']").attr("content");
+  var header = $("meta[name='_csrf_header']").attr("content");
+
+  var emojiId = document.getElementById('emojiId').value;
+  var buyerId = document.getElementById('buyerId').value;
+  var price = document.getElementById('price').value;
+
+  if (!emojiId || !buyerId || !price) {
+    console.error('구매 정보가 유효하지 않습니다.');
+    return;
+  }
+
+  var data = {
+    emojiId: emojiId,
+    buyerId: buyerId,
+    price: price
+  };
+
+  $.ajax({
+    url: '/emoji-purchase',
+    type: 'POST',
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader(header, token);
+    },
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function(response) {
+      console.log('구매가 완료되었습니다.');
+      window.location.href = '/mypage';
+    },
+    error: function(xhr, status, error) {
+      if (xhr.status === 400) {
+        var errorMessage = '';
+        var responseText = xhr.responseText;
+        if (responseText === 'INSUFFICIENT_POINTS') {
+          errorMessage = '포인트가 부족합니다.';
+        } else if (responseText === 'ALREADY_PURCHASED') {
+          errorMessage = '이미 보유한 이모티콘입니다.';
+        }
+        alert(errorMessage);
+      }
+    }
+  });
+}
+
+</script>
 </div>
 </body>
 </html>

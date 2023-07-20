@@ -51,8 +51,13 @@ public class TradeBoardService {
     private final TradeBoardCustomRepository tradeBoardCustomRepository;
 
     private final WishLikeRepository wishLikeRepository;
+
+
     @Autowired
     private Storage storage;
+
+
+
 
     @Autowired
     public TradeBoardService(TradeBoardRepository tradeBoardRepository, TradeBoardImgRepository tradeBoardImgRepository, UserRepository userRepository, UserLocationRepository userLocationRepository, TradeBoardCustomRepository tradeBoardCustomRepository, WishLikeRepository wishLikeRepository) {
@@ -67,6 +72,7 @@ public class TradeBoardService {
     public Slice<TradeBoardDto> getTradeBoard(TradeBoardSearchDto tradeBoardSearchDto, Pageable pageable){
         return tradeBoardCustomRepository.getTradeBoardBy(tradeBoardSearchDto, pageable);
     }
+
 
     public TradeBoard save(TradeBoard tradeBoard) {
         return tradeBoardRepository.save(tradeBoard);
@@ -280,6 +286,8 @@ public class TradeBoardService {
         List<TradeBoardDto> tradeBoardDtos = new ArrayList<>();
         for (TradeBoard tradeBoard : tradeBoards) {
             TradeBoardDto tradeBoardDto = new TradeBoardDto();
+            tradeBoardDto.setId(tradeBoard.getId());
+            tradeBoardDto.setModifiedDate(tradeBoard.getModifiedDate());
             tradeBoardDto.setTitle(tradeBoard.getTitle());
             tradeBoardDto.setPrice(tradeBoard.getPrice());
             tradeBoardDto.setThumbnail(tradeBoard.getThumbnail());
@@ -290,6 +298,7 @@ public class TradeBoardService {
 
         return tradeBoardDtos;
     }
+
 
     public void like(WishLikeRequestDto requestDto, Boolean like) {
 
@@ -346,5 +355,4 @@ public class TradeBoardService {
 
         return wish;
     }
-
 }

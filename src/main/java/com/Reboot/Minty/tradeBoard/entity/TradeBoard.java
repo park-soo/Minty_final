@@ -1,19 +1,14 @@
 package com.Reboot.Minty.tradeBoard.entity;
 
 
-
 import com.Reboot.Minty.categories.entity.SubCategory;
 import com.Reboot.Minty.categories.entity.TopCategory;
 import com.Reboot.Minty.member.entity.User;
-import com.Reboot.Minty.member.entity.UserLocation;
 import com.Reboot.Minty.tradeBoard.constant.TradeStatus;
 import com.Reboot.Minty.tradeBoard.dto.TradeBoardDetailDto;
-import com.Reboot.Minty.tradeBoard.dto.TradeBoardDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.modelmapper.ModelMapper;
 
@@ -74,7 +69,6 @@ public class TradeBoard {
     private TradeStatus status;
 
     @OneToMany(mappedBy = "tradeBoard" , cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<TradeBoardImg> images = new ArrayList<>();
 
     private static ModelMapper modelMapper =  new ModelMapper();

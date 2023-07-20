@@ -12,5 +12,6 @@ public class TradeBoardDetailResponseDto {
     private String nickName;
     private TradeBoardDetailDto tradeBoard;
     private List<TradeBoardImgDto> imageList;
-    private boolean wish;
+    private List<TradeBoardDto> userBoardItems;
+    private int countUserItems;
 }

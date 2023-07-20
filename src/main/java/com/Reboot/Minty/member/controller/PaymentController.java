@@ -34,10 +34,8 @@ public class PaymentController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private TwilioService twilioService;
-
     @Value("${payment.secretKey}")
     private String secretKey;
     @Value("${payment.clientKey}")
@@ -121,7 +119,7 @@ public class PaymentController {
         String message = "[Minty]\n" + nickname + " 님 " + amount + " 원 충전이 완료되었습니다.\n총 잔고 " + balance + " 원.";
         //twilioService.sendSms(mobile, message);
 
-        return "redirect:/member/myPage";
+        return "pay/success";
     }
 
     @GetMapping(value = "fail")

@@ -32,5 +32,10 @@
   <p>에러메시지 : <span th:text="${message}"></span></p>
   <p>에러코드 : <span th:text="${code}"></span></p>
 </th:block>
+
+<script>
+    window.opener.location.reload(); // 부모창 새로고침
+    window.close(); // 현재 팝업 창 닫기
+</script>
 </body>
 </html>

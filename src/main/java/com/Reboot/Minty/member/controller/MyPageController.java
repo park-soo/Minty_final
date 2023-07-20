@@ -1,6 +1,10 @@
 package com.Reboot.Minty.member.controller;
 
 
+import com.Reboot.Minty.emoji.entity.EmojiPurchase;
+import com.Reboot.Minty.emoji.entity.EmojiShop;
+import com.Reboot.Minty.emoji.service.EmojiPurchaseService;
+import com.Reboot.Minty.emoji.service.EmojiShopService;
 import com.Reboot.Minty.event.service.AttendanceService;
 import com.Reboot.Minty.member.entity.User;
 import com.Reboot.Minty.member.repository.UserRepository;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,11 +47,12 @@ public class MyPageController {
     private final ScheduleService scheduleService;
     private final ScheduleListService scheduleListService;
     private final TradeBoardService tradeBoardService;
-
+    private final EmojiPurchaseService emojiPurchaseService;
+    private final EmojiShopService emojiShopService;
 
 
     @Autowired
-    public MyPageController(AttendanceService attendanceService, UserRepository userRepository, UserService userService, ReviewService reviewService, TradeService tradeService, TradeRepository tradeRepository, ScheduleService scheduleService, ScheduleListService scheduleListService, TradeBoardService tradeBoardService) {
+    public MyPageController(AttendanceService attendanceService, UserRepository userRepository, UserService userService, ReviewService reviewService, TradeService tradeService, TradeRepository tradeRepository, ScheduleService scheduleService, ScheduleListService scheduleListService, TradeBoardService tradeBoardService, EmojiPurchaseService emojiPurchaseService, EmojiShopService emojiShopService) {
         this.attendanceService = attendanceService;
         this.userRepository = userRepository;
         this.userService = userService;
@@ -56,6 +62,8 @@ public class MyPageController {
         this.scheduleService = scheduleService;
         this.scheduleListService = scheduleListService;
         this.tradeBoardService = tradeBoardService;
+        this.emojiPurchaseService = emojiPurchaseService;
+        this.emojiShopService = emojiShopService;
     }
 
     @GetMapping("mypage")
@@ -82,6 +90,11 @@ public class MyPageController {
         List<Trade> trades = tradeService.getTradeList(userId);
         List<User> users = tradeService.getTradeUsers(trades, userId);
 
+        List<EmojiShop> purchasedEmojis = emojiPurchaseService.getPurchasedEmojisByUser(userId);
+        model.addAttribute("purchasedEmojis", purchasedEmojis);
+
+        EmojiShop emojiShop = emojiShopService.getEmojiShopById(userId);
+        model.addAttribute("emojiShop", emojiShop);
         model.addAttribute("trades", trades);
         model.addAttribute("users", users);
 

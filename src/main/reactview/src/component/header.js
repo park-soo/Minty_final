@@ -52,9 +52,7 @@ function Header({ csrfToken }) {
                             거래 게시판
                         </a>
                         <p></p>
-                        <a href="/event" className="nav-link menu-a">
-                            이벤트
-                        </a>
+
                         <p></p>
                         <a href="/communityList" className="nav-link menu-a">
                             커뮤니티
@@ -66,8 +64,11 @@ function Header({ csrfToken }) {
                         <p></p>
                         <a href="/getchatting" className="nav-link menu-a">
                             채팅
-                       </a>
-                       <p></p>
+                        </a>
+                        <p></p>
+                        <a href="/event" className="nav-link menu-a">
+                            이벤트
+                        </a>
                     </div>
                     <div className="navbar-nav d-flex flex-row gap-2">
                         <a href="/usershop" className="nav-link menu-a">
@@ -80,7 +81,7 @@ function Header({ csrfToken }) {
                         <p></p>
                         {userRole==='ADMIN' ? (<>
                             <a href="/manager" className="nav-link menu-a">
-                                                        관리자페이지
+                                관리자페이지
                             </a>
                         </>) : null}
 

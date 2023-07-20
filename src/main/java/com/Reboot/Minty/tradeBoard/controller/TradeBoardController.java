@@ -11,7 +11,6 @@ import com.Reboot.Minty.member.repository.UserLocationRepository;
 import com.Reboot.Minty.member.service.UserService;
 import com.Reboot.Minty.tradeBoard.dto.*;
 import com.Reboot.Minty.tradeBoard.entity.TradeBoard;
-import com.Reboot.Minty.tradeBoard.entity.WishLike;
 import com.Reboot.Minty.tradeBoard.repository.TradeBoardRepository;
 import com.Reboot.Minty.tradeBoard.service.TradeBoardService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,8 +50,6 @@ public class TradeBoardController {
     private final TradeBoardRepository tradeBoardRepository;
     private final AddressCodeRepository addressCodeRepository;
     private final UserService userService;
-
-
     @Autowired
     public TradeBoardController(CategoryService categoryService, TradeBoardService tradeBoardService, TradeBoardRepository tradeBoardRepository, AddressCodeRepository addressCodeRepository, UserLocationRepository userLocationRepository, UserService userService) {
         this.categoryService = categoryService;
@@ -160,7 +157,7 @@ public class TradeBoardController {
         List<SubCategoryDto> subCategories = categoryService.getSubCategoryList();
         List<AddressCodeDto> addressCode = addressCodeRepository.findAll().stream().map(AddressCodeDto::of).collect(Collectors.toList());
 
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 20);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() - 1 : 0, 20);
         Slice<TradeBoardDto> tradeBoards = tradeBoardService.getTradeBoard(tradeBoardSearchDto, pageable);
         Map<String, Object> response = new HashMap<>();
         response.put("addressCode", addressCode);
@@ -182,7 +179,6 @@ public class TradeBoardController {
         return data;
     }
 
-
     @GetMapping("/boardDetail/{boardId}")
     public String tradeBoardDetail() {
         return "../static/index";
@@ -193,18 +189,17 @@ public class TradeBoardController {
     public ResponseEntity<?> getDetail(@PathVariable("boardId") Long boardId, HttpServletRequest request) {
 
         try {
-            HttpSession session = request.getSession();
             TradeBoardDetailDto tradeBoard = tradeBoardService.findById(boardId);
+            User user = userService.getUserInfoById(tradeBoard.getUser().getId());
             List<TradeBoardImgDto> imageList = tradeBoardService.getImgList(boardId);
-
-
-            Long userId= (Long) session.getAttribute("userId");
-            System.out.println("로그인한 유저 아이디: " + userId);
-            System.out.println("보드 아이디 : " + boardId);
-            boolean wish = tradeBoardService.getWish(boardId,userId);
-            System.out.println("이까지 됐나????????"+wish);
-
+            List<TradeBoardDto> userBoardItems = tradeBoardService.getTradeBoardListByUser(tradeBoard.getUser().getId());
+            if (userBoardItems.size() > 6) {
+                userBoardItems = userBoardItems.subList(0, 6);
+            }
+            Collections.sort(userBoardItems, Comparator.comparing(TradeBoardDto::getCreatedDate).reversed());
+            int countUserItems = tradeBoardRepository.countByUser(user);
             String nickName = tradeBoard.getUser().getNickName();
+            HttpSession session = request.getSession();
             boolean isAuthor = tradeBoard.getUser().getEmail().equals(session.getAttribute("userEmail"));
             System.out.println("isAuthor>>" + isAuthor);
             System.out.println(nickName);
@@ -213,8 +208,8 @@ public class TradeBoardController {
             response.setTradeBoard(tradeBoard);
             response.setNickName(nickName);
             response.setImageList(imageList);
-            response.setWish(wish);
-
+            response.setUserBoardItems(userBoardItems);
+            response.setCountUserItems(countUserItems);
             return ResponseEntity.ok().body(response);
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
@@ -384,7 +379,6 @@ public class TradeBoardController {
         return tradeBoardService.getTradeBoardListByUser(userId);
     }
 
-
     // Heart Like API
     @PostMapping("/api/tradeBoard/like")
     @ResponseBody
@@ -416,4 +410,13 @@ public class TradeBoardController {
         }
     }
 
+    @PostMapping("/api/deleteUserLcation")
+    @ResponseBody
+    public ResponseEntity<?> deleteUserLocation(@RequestBody Long id, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+        userService.deleteUserLocation(id,userId);
+        List<UserLocationResponseDto> userLocationList = tradeBoardService.getLogginedLocationList(userId);
+        return ResponseEntity.ok().body(userLocationList);
+    }
 }

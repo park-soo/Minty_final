@@ -10,6 +10,7 @@ import com.Reboot.Minty.tradeBoard.entity.TradeBoard;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.modelmapper.ModelMapper;
 
 import java.sql.Timestamp;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class TradeBoardDetailDto {
     private Long id;
     private int price;
@@ -51,10 +53,13 @@ public class TradeBoardDetailDto {
 
     @Getter
     @Setter
+    @ToString
     public static class UserDto{
         private Long id;
         private String nickName;
         private String email;
+        private String image;
+        private int level;
     }
 
 
@@ -90,6 +95,8 @@ public class TradeBoardDetailDto {
         userDto.setId(tradeBoard.getUser().getId());
         userDto.setNickName(tradeBoard.getUser().getNickName());
         userDto.setEmail(tradeBoard.getUser().getEmail());
+        userDto.setLevel(tradeBoard.getUser().getLevel());
+        userDto.setImage(tradeBoard.getUser().getImage());
         tradeBoardDetailDto.setUser(userDto);
 
 

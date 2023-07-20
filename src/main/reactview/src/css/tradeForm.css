@@ -40,7 +40,7 @@
 
 }
 
-.modal-body {
+:local .modal-body {
   overflow-y: auto;
 }
 
