@@ -40,12 +40,12 @@ public class MessageController {
 
     }
 
-    @GetMapping("listmessage/{from}/{to}")
+    @GetMapping("/listmessage/{from}/{to}")
     public List<Map<String,Object>> getListMessageChat(@PathVariable("from") Integer from, @PathVariable("to") Integer to){
         return messageService.getListMessage(from, to);
     }
 
-    @GetMapping("listProducts/{from}/{to}")
+    @GetMapping("/listProducts/{from}/{to}")
     public List<Map<String,Object>> getListProducts(@PathVariable("from") Integer from, @PathVariable("to") Integer to){
         return productsService.getListProducts(from,to);
     }
@@ -57,7 +57,7 @@ public class MessageController {
 
     }
 
-    @GetMapping("listmessage/group/{address}")
+    @GetMapping("/listmessage/group/{address}")
     public List<Map<String,Object>> getListMessageGroupChat(@PathVariable("address") String address){
         return messageService.getListMessageGroups(address);
     }

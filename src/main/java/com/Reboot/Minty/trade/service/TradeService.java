@@ -60,7 +60,7 @@ public class TradeService {
         tradeBoard = tradeBoardRepository.save(tradeBoard);
         Trade existingTrades = tradeRepository.findByBoardIdAndBuyerIdAndSellerId(tradeBoard, buyer, seller);
         if(existingTrades != null){
-            throw new IllegalStateException(String.valueOf(existingTrades.getId()));
+            return null;
         }
         else {
             Trade trade = new Trade();
